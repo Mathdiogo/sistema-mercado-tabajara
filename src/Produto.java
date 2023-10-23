@@ -1,3 +1,4 @@
+import java.util.Calendar;
 import java.util.Date;
 
 public class Produto {
@@ -5,6 +6,13 @@ public class Produto {
     private String nome;
     private String descricao;
     private Date dataDeValidade;
+
+    public Produto(int codigo, String nome, String descricao, int dia, int mes, int ano) {
+        this.codigo = codigo;
+        this.nome = nome;
+        this.descricao = descricao;
+        setDataDeValidade(dia, mes, ano);
+    }
 
     public Produto(int codigo, String nome, String descricao, Date dataDeValidade) {
         this.codigo = codigo;
@@ -42,8 +50,17 @@ public class Produto {
         return this.descricao;
     }
 
-    public void setDataDeValidade(Date data) {
-        this.dataDeValidade = data;
+    public void setDataDeValidade(int dia, int mes, int ano) {
+        Calendar calendario = Calendar.getInstance();
+        calendario.set(Calendar.YEAR, ano);
+        calendario.set(Calendar.MONTH, mes);
+        calendario.set(Calendar.DAY_OF_MONTH, dia);
+
+        this.dataDeValidade = calendario.getTime();
+    }
+
+    public void setDataDeValidade(Date dataDeValidade) {
+        this.dataDeValidade = dataDeValidade;
     }
 
     public Date getDataDeValidade() {

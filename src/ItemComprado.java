@@ -5,9 +5,9 @@ public class ItemComprado {
     private float valorTotal;
     private Produto produto;
 
-    public ItemComprado(int quantidade, String nome, float precoUnitario, Produto produto) {
+    public ItemComprado(Produto produto, int quantidade, float precoUnitario) {
         this.quantidade = quantidade;
-        this.nome = nome;
+        this.nome = produto.getNome();
         this.precoUnitario = precoUnitario;
         this.valorTotal = precoUnitario * quantidade;
         this.produto = produto;

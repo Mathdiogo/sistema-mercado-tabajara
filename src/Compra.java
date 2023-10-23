@@ -1,22 +1,29 @@
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
+
 public class Compra {
     private int codigo;
     private Date data;
     private float valorTotal;
-    private int cpf_cnpj;
+    private String documentoCliente; //cpf ou cnpj
     private float valorPago;
     private float valorRestante;
     private List<ItemComprado> itensComprados;
 
-    public Compra(int codigo, Date data, float valorTotal, int cpf_cnpj, float valorPago, float valorRestante, List<ItemComprado> itensComprados) {
+    public Compra(int codigo, String documentoCliente, float valorPago, List<ItemComprado> itensComprados) {
         this.codigo = codigo;
-        this.data = data;
-        this.valorTotal = valorTotal;
-        this.cpf_cnpj = cpf_cnpj;
-        this.valorPago = valorPago;
-        this.valorRestante = valorRestante;
+        this.data = new Date(); //a data da compra sempre será a data atual da criação, ou seja, data de processamento da compra
+        this.documentoCliente = documentoCliente;
         this.itensComprados = itensComprados;
+
+        float somaDosItens = 0;
+        for(ItemComprado item : itensComprados) {
+            somaDosItens += item.getValorTotal();
+        }
+
+        this.valorTotal = somaDosItens;
+        this.valorPago = valorPago;
+        this.valorRestante = somaDosItens - valorPago;
     }
 
     public void setCodigo(int codigo) {
@@ -43,12 +50,12 @@ public class Compra {
         return this.valorTotal;
     }
 
-    public void setCpfCnpj(int cpf_cnpj) {
-        this.cpf_cnpj = cpf_cnpj;
+    public void setDocumentoCliente(String documentoCliente) {
+        this.documentoCliente = documentoCliente;
     }
 
-    public int getCpfCnpj() {
-        return this.cpf_cnpj;
+    public String getDocumentoCliente() {
+        return this.documentoCliente;
     }
 
     public void setValorPago(float valorPago) {
