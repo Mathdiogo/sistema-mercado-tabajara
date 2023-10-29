@@ -1,9 +1,50 @@
-import java.util.Date;
 import java.util.List;
-import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 public class Aplicativo {
     public static void main(String[] args) throws Exception {
+        ConversorDados dados = new ConversorDados();
+
+        List<Cliente> clientes = dados.CarregarDadosClientes();
+        List<Produto> produtos = dados.CarregarDadosProdutos();
+        List<Compra> compras = dados.CarregarDadosCompras();
+
+        String[] opcoes = { "1. Cadastro de cliente", "2. Deletar cliente pelo CPF ou CNPJ", "3. Deletar cliente pelo nome", "4. Cadastro de produtos", 
+                            "5. Efetuacao de compra", "6. Atualizacao da situacao de pagamentos de uma compra", "7. Relatorios", "8. Sair" };
+        String menu = "";
+
+        while (!menu.equals("8. Sair")) {
+            menu = (String) JOptionPane.showInputDialog(null, "<html>Choose A Menu Item:<br><br></html>", "Main Menu", 
+                    JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
+
+            switch (menu) {
+                case "1. Cadastro de cliente":
+                    CadastroCliente();
+                    break;
+                case "2. Deletar cliente pelo CPF ou CNPJ":
+                    DeletarClienteCpfOuCnpj();
+                    break;
+                case "3. Deletar cliente pelo nome":
+                    DeletarClienteNome();
+                    break;
+                case "4. Cadastro de produtos":
+                    CadastroProdutos();
+                    break;
+                case "5. Efetuacao de compra":
+                    EfetuacaoDeCompra();
+                    break;
+                case "6. Atualizacao da situacao de pagamentos de uma compra":
+                    AtualizarSituacaoDeCompra();
+                    break;
+                case "7. Relatorios":
+                    Relatorios();
+                    break;
+            }
+        }        
+        
+        dados.SalvarDados(clientes, produtos, compras);
+
+        /* 
         //popula o banco de dados de produtos
         Produto arrozProduto = new Produto(1, "Arroz", "1 Kg; Serve até 4 pessoas", 3, 4, 2024);
         Produto leiteProduto = new Produto(2, "Leite", "1.5 L; Marca Leite Ninho", 1, 2, 2024);
@@ -34,5 +75,34 @@ public class Aplicativo {
         for(ItemComprado item : compra.getItensComprados()) {
             System.out.println(item.getNome());
         }
+        */
+    }
+
+    private static void CadastroCliente() {
+
+    }
+
+    private static void DeletarClienteCpfOuCnpj() {
+
+    }
+
+    private static void DeletarClienteNome() {
+
+    }
+
+    private static void CadastroProdutos() {
+
+    }
+
+    private static void EfetuacaoDeCompra() {
+
+    }
+
+    private static void AtualizarSituacaoDeCompra() {
+
+    }
+
+    private static void Relatorios() {
+
     }
 }
