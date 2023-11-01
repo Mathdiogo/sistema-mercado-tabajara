@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class Aplicativo {
         String menu = "";
 
         while (!menu.equals("8. Sair")) {
-            menu = (String) JOptionPane.showInputDialog(null, "<html>Choose A Menu Item:<br><br></html>", "Main Menu", 
+            menu = (String) JOptionPane.showInputDialog(null, "<html>MENU<br><br></html>", "Mercado Tabajara", 
                     JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
 
             switch (menu) {
@@ -34,7 +35,7 @@ public class Aplicativo {
                     CadastroProdutos(produtos);
                     break;
                 case "5. Efetuacao de compra":
-                    EfetuacaoDeCompra();
+                    EfetuacaoDeCompra(compras, produtos, clientes);
                     break;
                 case "6. Atualizacao da situacao de pagamentos de uma compra":
                     AtualizarSituacaoDeCompra();
@@ -43,9 +44,9 @@ public class Aplicativo {
                     Relatorios();
                     break;
             }
+
+            dados.SalvarDados(clientes, produtos, compras);
         }        
-        
-        dados.SalvarDados(clientes, produtos, compras);
     }
 
     private static void CadastroCliente(List<Cliente> clientes) {
@@ -216,8 +217,99 @@ public class Aplicativo {
         } 
     }
 
-    private static void EfetuacaoDeCompra() {
+    private static void EfetuacaoDeCompra(List<Compra> compras, List<Produto> produtos, List<Cliente> clientes) {
+        String[] botoes = { "Adicionar itens a compra", "Proseguir", "Cancelar" };    
+        
+        Compra novaCompra = new Compra(compras.size() + 1, "", 0, new ArrayList<ItemComprado>());
 
+        boolean repetir = true;
+        boolean cancelarCompra = false;
+
+        while (repetir) {
+            int retorno = JOptionPane.showOptionDialog(null, "", "Compra",
+                    JOptionPane.WARNING_MESSAGE, 3, null, botoes, botoes[0]);
+                    
+            if (botoes[retorno] == "Adicionar itens a compra") {
+                ItemComprado itemComprado = ElaborarItemComprado(produtos);
+                if (itemComprado != null) {
+                    novaCompra.adicionarItemComprado(itemComprado);
+                }
+            } else if (botoes[retorno] == "Proseguir") {
+                if (novaCompra.getItensComprados().size() > 0) {
+                    ElaborarCompra(novaCompra, clientes);
+                    if (novaCompra.getDocumentoCliente() != "") {
+                        repetir = false;
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Nenhum item adicionado na compra!", "Compra", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } else {
+                repetir = false;
+                cancelarCompra = true;
+            }
+        }
+
+        if(cancelarCompra) {
+            JOptionPane.showMessageDialog(null, "Compra cancelada!", "Compra", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            compras.add(novaCompra);
+            JOptionPane.showMessageDialog(null, "Compra efetuada com sucesso!", "Compra", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    private static ItemComprado ElaborarItemComprado(List<Produto> produtos) {
+        JTextField nome = new JTextField();
+        JTextField quantidade = new JTextField();
+        JTextField precoUnitario = new JTextField();
+        Object[] mensagem = {
+            "Nome do produto:", nome,
+            "Quantidade:", quantidade,
+            "Preço unitário:", precoUnitario
+        };
+
+        int opcao = JOptionPane.showConfirmDialog(null, mensagem, "Compra", JOptionPane.OK_CANCEL_OPTION, 1);
+        if (opcao == JOptionPane.OK_OPTION) {
+            try {
+                Produto produto = produtos.stream().filter(item -> {return item.getNome().equals(nome.getText());}).findAny().orElse(null);
+                if (produto == null) {
+                    throw new Exception();
+                }
+
+                ItemComprado itemComprado = new ItemComprado(produto, Integer.parseInt(quantidade.getText()), Float.parseFloat(precoUnitario.getText()));
+                JOptionPane.showMessageDialog(null, "Item adicionado a compra", "Compra", JOptionPane.INFORMATION_MESSAGE);
+
+                return itemComprado;
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Erro: Produto não encontrado", "Compra", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+        } 
+
+        return null;
+    }
+
+    private static void ElaborarCompra(Compra compra, List<Cliente> clientes) {
+        JTextField documentoCliente = new JTextField();
+        JTextField valorPago = new JTextField();
+        Object[] mensagem = {
+            "Documento do cliente (CPF ou CNPJ):", documentoCliente,
+            "Valor pago:", valorPago
+        };
+        
+        int opcao = JOptionPane.showConfirmDialog(null, mensagem, "Compra", JOptionPane.OK_CANCEL_OPTION, 1);
+        if (opcao == JOptionPane.OK_OPTION) {
+            try {
+                Cliente clienteProcurado = clientes.stream().filter(cliente -> {return cliente.getNumeroCadastro().equals(documentoCliente.getText());}).findAny().orElse(null);
+                if (clienteProcurado == null) {
+                    throw new Exception();
+                }
+
+                compra.setDocumentoCliente(documentoCliente.getText());
+                compra.setValorPago(Float.parseFloat(valorPago.getText()));
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Erro: Cliente não encontrado", "Compra", JOptionPane.ERROR_MESSAGE);
+            }
+        } 
     }
 
     private static void AtualizarSituacaoDeCompra() {
@@ -228,36 +320,3 @@ public class Aplicativo {
 
     }
 }
-
-/* 
-//popula o banco de dados de produtos
-Produto arrozProduto = new Produto(1, "Arroz", "1 Kg; Serve até 4 pessoas", 3, 4, 2024);
-Produto leiteProduto = new Produto(2, "Leite", "1.5 L; Marca Leite Ninho", 1, 2, 2024);
-
-//cadastra um cliente
-Endereco endereco1 = new Endereco("Rua Paschoal Colombo", 54, "Parque Bela Vista", 18110230, "Sorocaba", "SP");
-PessoaFisica cliente1 = new PessoaFisica("Rogerio", endereco1, "53255829390", 3, new Date());
-
-//realiza uma compra
-List<ItemComprado> itensComprados = new ArrayList<ItemComprado>();
-
-ItemComprado itemComprado1 = new ItemComprado(arrozProduto, 3, 34.23f);
-itensComprados.add(itemComprado1);
-
-ItemComprado itemComprado2 = new ItemComprado(leiteProduto, 2, 8.23f);
-itensComprados.add(itemComprado2);
-
-Compra compra = new Compra(0, cliente1.getCpf(), 13.0f, itensComprados);
-
-//teste
-System.out.println("id da compra: " + compra.getCodigo());
-System.out.println("documento do cliente: " + compra.getDocumentoCliente());
-System.out.println("valor total: " + compra.getValorTotal());
-System.out.println("valor pago: " + compra.getValorPago());
-System.out.println("valor restante: " + compra.getValorRestante());
-System.out.println("------------------------");
-System.out.println("itens comprados: ");
-for(ItemComprado item : compra.getItensComprados()) {
-    System.out.println(item.getNome());
-}
-*/

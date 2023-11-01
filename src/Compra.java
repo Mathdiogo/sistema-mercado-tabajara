@@ -22,8 +22,12 @@ public class Compra {
         this.itensComprados = itensComprados;
 
         float somaDosItens = 0;
-        for(ItemComprado item : itensComprados) {
-            somaDosItens += item.getValorTotal();
+        if (itensComprados.size() > 0) {
+            for(ItemComprado item : itensComprados) {
+                somaDosItens += item.getValorTotal();
+            }
+        } else {
+            somaDosItens = 0;
         }
 
         this.valorTotal = somaDosItens;
@@ -49,6 +53,7 @@ public class Compra {
 
     public void setValorTotal(float valorTotal) {
         this.valorTotal = valorTotal;
+        this.valorRestante = this.valorTotal - this.valorPago;
     }
 
     public float getValorTotal() {
@@ -65,6 +70,7 @@ public class Compra {
 
     public void setValorPago(float valorPago) {
         this.valorPago = valorPago;
+        this.valorRestante = this.valorTotal - this.valorPago;
     }
 
     public float getValorPago() {
@@ -77,6 +83,12 @@ public class Compra {
 
     public float getValorRestante() {
         return this.valorRestante;
+    }
+
+    public void adicionarItemComprado(ItemComprado itemComprado) {
+        this.itensComprados.add(itemComprado);
+        this.valorTotal += itemComprado.getValorTotal();
+        this.valorRestante = this.valorTotal - this.valorPago;
     }
 
     public void setItensComprados(List<ItemComprado> itensComprados) {
