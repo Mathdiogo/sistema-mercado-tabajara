@@ -1,0 +1,35 @@
+[
+    {
+        "tipo": "fisica",
+        "nome": "Vitor Augusto",
+        "numeroCadastro": "53255727847",
+        "endereco": {
+            "rua": "Paschoal Colombo",
+            "numero": 34,
+            "bairro": "Parque Bela Vista",
+            "cep": 18110590,
+            "cidade": "34",
+            "estado": "SP"
+        },
+        "data": 1698795905190,
+        "compras": null,
+        "quantidadeParcelas": 3
+    },
+    {
+        "tipo": "juridica",
+        "nome": "Dynapac",
+        "numeroCadastro": "192178",
+        "endereco": {
+            "rua": "George Shaffler",
+            "numero": 433,
+            "bairro": "Facens",
+            "cep": 182940,
+            "cidade": "Sorocaba",
+            "estado": "SP"
+        },
+        "data": 1698795942620,
+        "compras": null,
+        "razaoSocial": "Dynapac LTDA",
+        "prazoMaximoDePagamento": 2
+    }
+]

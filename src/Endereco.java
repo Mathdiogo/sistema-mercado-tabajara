@@ -1,3 +1,6 @@
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Endereco {
     private String rua;
     private int numero;
@@ -6,7 +9,9 @@ public class Endereco {
     private String cidade;
     private String estado;
     
-    public Endereco(String rua, int numero, String bairro, int cep, String cidade, String estado) {
+    @JsonCreator
+    public Endereco(@JsonProperty("rua") String rua, @JsonProperty("numero") int numero, @JsonProperty("bairro") String bairro, @JsonProperty("cep") int cep, 
+                    @JsonProperty("cidade") String cidade, @JsonProperty("estado") String estado) {
         this.rua = rua;
         this.numero = numero;
         this.bairro = bairro;

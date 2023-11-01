@@ -1,6 +1,9 @@
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Compra {
     private int codigo;
     private Date data;
@@ -10,7 +13,9 @@ public class Compra {
     private float valorRestante;
     private List<ItemComprado> itensComprados;
 
-    public Compra(int codigo, String documentoCliente, float valorPago, List<ItemComprado> itensComprados) {
+    @JsonCreator
+    public Compra(@JsonProperty("codigo") int codigo, @JsonProperty("documentoCliente") String documentoCliente, @JsonProperty("valorPago") float valorPago, 
+                  @JsonProperty("itensComprados") List<ItemComprado> itensComprados) {
         this.codigo = codigo;
         this.data = new Date(); //a data da compra sempre será a data atual da criação, ou seja, data de processamento da compra
         this.documentoCliente = documentoCliente;

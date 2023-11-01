@@ -1,13 +1,18 @@
 import java.util.Calendar;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Produto {
     private int codigo;
     private String nome;
     private String descricao;
     private Date dataDeValidade;
 
-    public Produto(int codigo, String nome, String descricao, int dia, int mes, int ano) {
+    @JsonCreator
+    public Produto(@JsonProperty("codigo") int codigo, @JsonProperty("nome") String nome, @JsonProperty("descricao") String descricao, 
+                   @JsonProperty("dia") int dia, @JsonProperty("mes") int mes, @JsonProperty("ano") int ano) {
         this.codigo = codigo;
         this.nome = nome;
         this.descricao = descricao;

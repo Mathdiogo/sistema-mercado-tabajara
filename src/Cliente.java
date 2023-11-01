@@ -3,21 +3,27 @@ import java.util.Calendar;
 import java.util.List;
 
 public class Cliente {
+    protected String tipo;
     protected String nome;
+    protected String numeroCadastro;
     protected Endereco endereco;
     protected Date data;
     protected List<Compra> compras;
     
     public void paraString() { }
 
-    public Cliente(String nome, Endereco endereco, Date data) {
+    public Cliente(String nome, String numeroCadastro, Endereco endereco, Date data, String tipo) {
+        this.tipo = tipo;
         this.nome = nome;
+        this.numeroCadastro = numeroCadastro;
         this.endereco = endereco;
         this.data = data;
     }
 
-    public Cliente(String nome, Endereco endereco, int dataDia, int dataMes, int dataAno) {
+    public Cliente(String nome, String numeroCadastro, Endereco endereco, int dataDia, int dataMes, int dataAno, String tipo) {
+        this.tipo = tipo;
         this.nome = nome;
+        this.numeroCadastro = numeroCadastro;
         this.endereco = endereco;
         this.setData(dataDia, dataMes, dataAno);
     }
@@ -32,6 +38,18 @@ public class Cliente {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getTipo() {
+        return this.tipo;
+    }
+
+    public void setNumeroCadastro(String numeroCadastro) {
+        this.numeroCadastro = numeroCadastro;
+    }
+
+    public String getNumeroCadastro() {
+        return this.numeroCadastro;
     }
 
     public Endereco getEndereco() {

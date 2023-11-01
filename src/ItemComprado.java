@@ -1,3 +1,6 @@
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ItemComprado {
     private int quantidade;
     private String nome;
@@ -5,7 +8,8 @@ public class ItemComprado {
     private float valorTotal;
     private Produto produto;
 
-    public ItemComprado(Produto produto, int quantidade, float precoUnitario) {
+    @JsonCreator
+    public ItemComprado(@JsonProperty("produto") Produto produto, @JsonProperty("quantidade") int quantidade, @JsonProperty("precoUnitario") float precoUnitario) {
         this.quantidade = quantidade;
         this.nome = produto.getNome();
         this.precoUnitario = precoUnitario;

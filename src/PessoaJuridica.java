@@ -1,30 +1,25 @@
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class PessoaJuridica extends Cliente {
-    public String cnpj;
-    public String razaoSocial;
-    public int prazoMaximoDePagamento;
+    private String razaoSocial;
+    private int prazoMaximoDePagamento;
 
-    public PessoaJuridica(String nome, Endereco endereco, String cnpj, String razaoSocial, int prazoMaximoDePagamento, int dataDia, int dataMes, int dataAno) {
-        super(nome, endereco, dataDia, dataMes, dataAno);
-        this.cnpj = cnpj;
+    @JsonCreator
+    public PessoaJuridica(@JsonProperty("nome") String nome, @JsonProperty("razaoSocial") String razaoSocial, @JsonProperty("endereco") Endereco endereco, 
+                          @JsonProperty("cnpj") String cnpj, @JsonProperty("prazoMaximoDePagamento") int prazoMaximoDePagamento, @JsonProperty("dataDia") int dataDia, 
+                          @JsonProperty("dataMes") int dataMes, @JsonProperty("dataAno") int dataAno) {
+        super(nome, cnpj, endereco, dataDia, dataMes, dataAno, "juridica");
         this.razaoSocial = razaoSocial;
         this.prazoMaximoDePagamento = prazoMaximoDePagamento;
     }
 
-    public PessoaJuridica(String nome, Endereco endereco, String cnpj, String razaoSocial, int prazoMaximoDePagamento, Date data) {
-        super(nome, endereco, data);
-        this.cnpj = cnpj;
+    public PessoaJuridica(String nome, String razaoSocial, Endereco endereco, String cnpj, int prazoMaximoDePagamento, Date data) {
+        super(nome, cnpj, endereco, data, "juridica");
         this.razaoSocial = razaoSocial;
         this.prazoMaximoDePagamento = prazoMaximoDePagamento;
-    }
-
-    public String getCnpj() {
-        return cnpj;
-    }
-
-    public void setCnpj(String cnpj) {
-        this.cnpj = cnpj;
     }
 
     public String getRazaoSocial() {

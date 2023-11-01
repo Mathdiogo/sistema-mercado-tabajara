@@ -1,27 +1,22 @@
 import java.util.Date;
 
-public class PessoaFisica extends Cliente {
-    public String cpf;
-    public int quantidadeParcelas;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    public PessoaFisica(String nome, Endereco endereco, String cpf, int quantidadeParcelas, int dataDia, int dataMes, int dataAno) {
-        super(nome, endereco, dataDia, dataMes, dataAno);
-        this.cpf = cpf;
+public class PessoaFisica extends Cliente {
+    private int quantidadeParcelas;
+
+    @JsonCreator
+    public PessoaFisica(@JsonProperty("nome") String nome, @JsonProperty("endereco") Endereco endereco, @JsonProperty("cpf") String cpf, 
+                        @JsonProperty("quantidadeParcelas") int quantidadeParcelas, @JsonProperty("dataDia") int dataDia, @JsonProperty("dataMes") int dataMes, 
+                        @JsonProperty("dataAno") int dataAno) {
+        super(nome, cpf, endereco, dataDia, dataMes, dataAno, "fisica");
         this.quantidadeParcelas = quantidadeParcelas;
     }
 
     public PessoaFisica(String nome, Endereco endereco, String cpf, int quantidadeParcelas, Date data) {
-        super(nome, endereco, data);
-        this.cpf = cpf;
+        super(nome, cpf, endereco, data, "fisica");
         this.quantidadeParcelas = quantidadeParcelas;
-    }
-    
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
     }
 
     public int getQuantidadeParcelas() {
