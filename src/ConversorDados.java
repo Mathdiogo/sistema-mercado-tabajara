@@ -15,7 +15,7 @@ public class ConversorDados {
 
     private ObjectMapper mapeador = new ObjectMapper();
 
-    public void SalvarDados(List<Cliente> clientes, List<Produto> produtos, List<Compra> compras) {
+    public void salvarDados(List<Cliente> clientes, List<Produto> produtos, List<Compra> compras) {
         try {
             mapeador.writeValue(new File(diretorioClientes), clientes);
         } catch (IOException e) {
@@ -35,7 +35,7 @@ public class ConversorDados {
         }
     }
 
-    public List<Cliente> CarregarDadosClientes() {
+    public List<Cliente> carregarDadosClientes() {
         List<Cliente> clientes = new ArrayList<Cliente>();
 
         try {
@@ -71,7 +71,7 @@ public class ConversorDados {
         return clientes;
     }
 
-    public List<Produto> CarregarDadosProdutos() {
+    public List<Produto> carregarDadosProdutos() {
         List<Produto> produtos = new ArrayList<Produto>();
 
         try {
@@ -84,7 +84,7 @@ public class ConversorDados {
         return produtos;
     }
 
-    public List<Compra> CarregarDadosCompras() {
+    public List<Compra> carregarDadosCompras() {
         List<Compra> compras= new ArrayList<Compra>();
 
         try {
