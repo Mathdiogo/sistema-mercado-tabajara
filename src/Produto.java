@@ -10,6 +10,9 @@ public class Produto {
     private String descricao;
     private Date dataDeValidade;
 
+    //Abaixo existem anotações no construtor, essas anotações são para a biblioteca Jackson, que transforma classes em JSON e vice-versa
+    //Para que essa conversão seja feita, as anotações definem como os campos serão ao serem transformados para JSON
+
     @JsonCreator
     public Produto(@JsonProperty("codigo") int codigo, @JsonProperty("nome") String nome, @JsonProperty("descricao") String descricao, 
                    @JsonProperty("dia") int dia, @JsonProperty("mes") int mes, @JsonProperty("ano") int ano) {
@@ -19,6 +22,8 @@ public class Produto {
         setDataDeValidade(dia, mes, ano);
     }
 
+    //construtor alternativo
+
     public Produto(int codigo, String nome, String descricao, Date dataDeValidade) {
         this.codigo = codigo;
         this.nome = nome;
@@ -26,10 +31,13 @@ public class Produto {
         this.dataDeValidade = dataDeValidade;
     }
 
+    //Utilizado para verificar se o produto está fora da data de validade
     public boolean verificarValidade() {
         Date dataAtual = new Date();
         return dataAtual.after(this.dataDeValidade);
     }
+
+    //métodos getters e setters
 
     public void setCodigo(int codigo) {
         this.codigo = codigo;

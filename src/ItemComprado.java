@@ -8,6 +8,9 @@ public class ItemComprado {
     private float valorTotal;
     private Produto produto;
 
+    //Abaixo existem anotações no construtor, essas anotações são para a biblioteca Jackson, que transforma classes em JSON e vice-versa
+    //Para que essa conversão seja feita, as anotações definem como os campos serão ao serem transformados para JSON
+
     @JsonCreator
     public ItemComprado(@JsonProperty("produto") Produto produto, @JsonProperty("quantidade") int quantidade, @JsonProperty("precoUnitario") float precoUnitario) {
         this.quantidade = quantidade;
@@ -17,7 +20,8 @@ public class ItemComprado {
         this.produto = produto;
     }
 
-    //todo
+    //funções getters e setters
+
     public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
     }
@@ -42,7 +46,6 @@ public class ItemComprado {
         return this.precoUnitario;
     }
 
-    //todo
     public void setValorTotal(float valorTotal) {
         this.valorTotal = valorTotal;
     }

@@ -8,10 +8,14 @@ import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+//Classe principal que gerencia a interface do usuário
+
 public class Aplicativo {
     public static void main(String[] args) throws Exception {
         ConversorDados dados = new ConversorDados();
 
+        //Lista que irá amarzenar os dados que serão carregados e salvos durante o uso do programa
+        //As respectivas listas carregam os dados 
         List<Cliente> clientes = dados.carregarDadosClientes();
         List<Produto> produtos = dados.carregarDadosProdutos();
         List<Compra> compras = dados.carregarDadosCompras();
@@ -48,15 +52,18 @@ public class Aplicativo {
                     break;
             }
 
+            //Toda vez que um ciclo do while termina (ou seja, após a interação com o JOptionPane) os dados são salvos
             dados.salvarDados(clientes, produtos, compras);
         }        
     }
 
     private static void cadastrarCliente(List<Cliente> clientes) {
+        //Antes de cadastrar um novo cliente, o usuário escolhe qual o tipo do cliente que será cadastrado
         String[] botoes = { "Física", "Jurídica" };    
         int retorno = JOptionPane.showOptionDialog(null, "O cliente é uma pessoa física ou jurídica?", "Cadastro de Cliente",
                       JOptionPane.WARNING_MESSAGE, 3, null, botoes, botoes[0]);
         
+        //Respectivas telas para cada tipo de cliente
         if (botoes[retorno] == "Física") {
             cadastrarPessoaFisica(clientes);
         } else {
@@ -92,6 +99,7 @@ public class Aplicativo {
         int opcao = JOptionPane.showConfirmDialog(null, mensagem, "Cadastro de Cliente", JOptionPane.OK_CANCEL_OPTION, 1);
         if (opcao == JOptionPane.OK_OPTION) {
             try {
+                //Verifica, por meio do nome, se o cliente já não existe
                 if(clientes.stream().filter(cliente -> {return cliente.getNome().equals(nome.getText());}).findAny().orElse(null) != null) {
                     JOptionPane.showMessageDialog(null, "Cliente já cadastrado!", "Erro", JOptionPane.ERROR_MESSAGE);
                     throw new Exception();
@@ -141,6 +149,7 @@ public class Aplicativo {
         int opcao = JOptionPane.showConfirmDialog(null, mensagem, "Cadastro de Cliente", JOptionPane.OK_CANCEL_OPTION, 1);
         if (opcao == JOptionPane.OK_OPTION) {
             try {
+                //Verifica, por meio do nome, se o cliente já não existe
                 if(clientes.stream().filter(cliente -> {return cliente.getNome().equals(nomeFantasia.getText());}).findAny().orElse(null) != null) {
                     JOptionPane.showMessageDialog(null, "Cliente já cadastrado!", "Erro", JOptionPane.ERROR_MESSAGE);
                     throw new Exception();
@@ -170,6 +179,7 @@ public class Aplicativo {
         int opcao = JOptionPane.showConfirmDialog(null, mensagem, "Excluir Cliente", JOptionPane.OK_CANCEL_OPTION, 0);
         if (opcao == JOptionPane.OK_OPTION) {
             try {
+                //Procura na lista de clientes pelo numero de cadastro 
                 if (clientes.removeIf(cliente -> cliente.getNumeroCadastro().equals(numeroCadastro.getText()))) {
                     JOptionPane.showMessageDialog(null, "Cliente excluido com sucesso", "Excluir Cliente", JOptionPane.INFORMATION_MESSAGE);
                 } else {
@@ -190,6 +200,7 @@ public class Aplicativo {
         int opcao = JOptionPane.showConfirmDialog(null, mensagem, "Excluir Cliente", JOptionPane.OK_CANCEL_OPTION, 0);
         if (opcao == JOptionPane.OK_OPTION) {
             try {
+                //Procura na lista de clientes pelo nome 
                 if (clientes.removeIf(cliente -> cliente.getNome().equals(nome.getText()))) {
                     JOptionPane.showMessageDialog(null, "Cliente excluido com sucesso", "Excluir Cliente", JOptionPane.INFORMATION_MESSAGE);
                 } else {
@@ -218,11 +229,14 @@ public class Aplicativo {
         int opcao = JOptionPane.showConfirmDialog(null, mensagem, "Cadastro de Produto", JOptionPane.OK_CANCEL_OPTION, 1);
         if (opcao == JOptionPane.OK_OPTION) {
             try {
+                //Verifica, pelo nome, se o produto já não existe
                 if(produtos.stream().filter(cliente -> {return cliente.getNome().equals(nome.getText());}).findAny().orElse(null) != null) {
                     JOptionPane.showMessageDialog(null, "Produto já cadastrado!", "Erro", JOptionPane.ERROR_MESSAGE);
                     throw new Exception();
                 }
 
+                //Obs.: os IDs dos clientes, produtos e compras sempre são definidos pelo sistema e nunca pelo usuário
+                //Nesse caso, ele pega o tamanho da lista de produtos e adiciona mais um no valor, esse será o ID
                 Produto produto = new Produto(produtos.size() + 1, nome.getText(), descricao.getText(), 
                                   Integer.parseInt(diaValidade.getText()), Integer.parseInt(diaValidade.getText()), Integer.parseInt(diaValidade.getText()));
 
@@ -243,27 +257,28 @@ public class Aplicativo {
         boolean repetir = true;
         boolean cancelarCompra = false;
 
+        //O while loop é utilizado caso o cliente queira adicionar mais de um produto na compra, então a lógica do código se repete até o cliente concluir
         while (repetir) {
             int retorno = JOptionPane.showOptionDialog(null, "", "Compra",
                     JOptionPane.WARNING_MESSAGE, 3, null, botoes, botoes[0]);
                     
             if (botoes[retorno] == "Adicionar itens a compra") {
-                ItemComprado itemComprado = elaborarItemComprado(produtos);
+                ItemComprado itemComprado = elaborarItemComprado(produtos); //interface para adicionar um item na compra
                 if (itemComprado != null) {
-                    novaCompra.adicionarItemComprado(itemComprado);
+                    novaCompra.adicionarItemComprado(itemComprado); //adicionar o item elaborado dentro do objeto compra
                 }
             } else if (botoes[retorno] == "Proseguir") {
-                if (novaCompra.getItensComprados().size() > 0) {
-                    elaborarCompra(novaCompra, clientes);
-                    if (novaCompra.getDocumentoCliente() != "") {
-                        repetir = false;
+                if (novaCompra.getItensComprados().size() > 0) { //verifica se existe pelo menos um item na compra
+                    elaborarCompra(novaCompra, clientes); //interface para definir os ultimos dados da compra
+                    if (novaCompra.getDocumentoCliente() != "") { //verifica se o documento do cliente não está vazio
+                        repetir = false; //sai do while loop 
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Nenhum item adicionado na compra!", "Compra", JOptionPane.INFORMATION_MESSAGE);
                 }
             } else {
                 repetir = false;
-                cancelarCompra = true;
+                cancelarCompra = true; //caso o botão de Cancelar seja pressionado, essa variavel irá se tornar verdadeira
             }
         }
 
@@ -288,6 +303,7 @@ public class Aplicativo {
         int opcao = JOptionPane.showConfirmDialog(null, mensagem, "Compra", JOptionPane.OK_CANCEL_OPTION, 1);
         if (opcao == JOptionPane.OK_OPTION) {
             try {
+                //Procura pelo item a partir do nome, caso não encontre retorna um erro
                 Produto produto = produtos.stream().filter(item -> {return item.getNome().equals(nome.getText());}).findAny().orElse(null);
                 if (produto == null) {
                     throw new Exception();
@@ -317,6 +333,7 @@ public class Aplicativo {
         int opcao = JOptionPane.showConfirmDialog(null, mensagem, "Compra", JOptionPane.OK_CANCEL_OPTION, 1);
         if (opcao == JOptionPane.OK_OPTION) {
             try {
+                //procura pelo cliente a partir do numero do documento, caso não encontre, retorna um erro
                 Cliente clienteProcurado = clientes.stream().filter(cliente -> {return cliente.getNumeroCadastro().equals(documentoCliente.getText());}).findAny().orElse(null);
                 if (clienteProcurado == null) {
                     throw new Exception();
@@ -339,6 +356,7 @@ public class Aplicativo {
         int opcao = JOptionPane.showConfirmDialog(null, mensagem, "Atualizar Situação da Compra", JOptionPane.OK_CANCEL_OPTION, 1);
         if (opcao == JOptionPane.OK_OPTION) {
             try {
+                // procura pelo compra apartir do ID, caso não encontre retorna um erro
                 Compra compraProcurada = compras.stream().filter(compra -> {return Integer.parseInt(compraID.getText()) == compra.getCodigo();}).findAny().orElse(null);
                 if (compraProcurada == null) {
                     throw new Exception();
@@ -432,12 +450,16 @@ public class Aplicativo {
                 listarCompras(Arrays.asList(compraMaisBarata));
                 break;
             case "(k) Relação do valor total de compras feitas em cada mês nos últimos 12 meses":
+                //Por meio do objeto calendario é possivel subtrair 12 meses da data atual
                 Calendar calendario = Calendar.getInstance();  
                 calendario.setTime(new Date());  
                 calendario.set(Calendar.MONTH, -12);  
                 Date umAnoAtras = calendario.getTime();
 
+                //compara se a data das compras é maior do que a data umAnoAtras
                 List<Compra> comprasUltimoAno = compras.stream().filter(compra -> {return compra.getData().compareTo(umAnoAtras) > 0;}).collect(Collectors.toList());
+
+                //Organiza a lista em ordem crescente pela data
                 comprasUltimoAno.sort((primeiro, segundo) -> primeiro.getData().compareTo(segundo.getData()));
                 listarCompras(comprasUltimoAno);
                 break;

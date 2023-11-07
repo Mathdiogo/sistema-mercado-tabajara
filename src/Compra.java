@@ -8,10 +8,13 @@ public class Compra {
     private int codigo;
     private Date data;
     private float valorTotal;
-    private String documentoCliente; //cpf ou cnpj
+    private String documentoCliente; //CPF ou CNPJ do cliente
     private float valorPago;
     private float valorRestante;
     private List<ItemComprado> itensComprados;
+
+    //Abaixo existem anotações no construtor, essas anotações são para a biblioteca Jackson, que transforma classes em JSON e vice-versa
+    //Para que essa conversão seja feita, as anotações definem como os campos serão ao serem transformados para JSON
 
     @JsonCreator
     public Compra(@JsonProperty("codigo") int codigo, @JsonProperty("documentoCliente") String documentoCliente, @JsonProperty("valorPago") float valorPago, 
@@ -20,6 +23,9 @@ public class Compra {
         this.data = new Date(); //a data da compra sempre será a data atual da criação, ou seja, data de processamento da compra
         this.documentoCliente = documentoCliente;
         this.itensComprados = itensComprados;
+
+        //o valor total não é definido pelos parametros da função, mas sim calculado dentro da função
+        //o construtor percorre por todos os itens e adiciona ao valor total
 
         float somaDosItens = 0;
         if (itensComprados.size() > 0) {
@@ -32,8 +38,12 @@ public class Compra {
 
         this.valorTotal = somaDosItens;
         this.valorPago = valorPago;
-        this.valorRestante = somaDosItens - valorPago;
+
+        //de maneira semelhante ao valor total, o valor restante também é calculado dentro do construtor
+        this.valorRestante = somaDosItens - valorPago; 
     }
+
+    //getter e setters do construtor
 
     public void setCodigo(int codigo) {
         this.codigo = codigo;
@@ -51,6 +61,7 @@ public class Compra {
         return this.data;
     }
 
+    //sempre que um novo valor total é definido, os outros propriedades da classe que são afetadas por ele também são atualizadas
     public void setValorTotal(float valorTotal) {
         this.valorTotal = valorTotal;
         this.valorRestante = this.valorTotal - this.valorPago;
@@ -85,6 +96,7 @@ public class Compra {
         return this.valorRestante;
     }
 
+    //ao adicionar um item, as propriedades de preço também são atualizadas
     public void adicionarItemComprado(ItemComprado itemComprado) {
         this.itensComprados.add(itemComprado);
         this.valorTotal += itemComprado.getValorTotal();

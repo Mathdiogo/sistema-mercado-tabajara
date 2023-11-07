@@ -9,6 +9,12 @@ public class Endereco {
     private String cidade;
     private String estado;
     
+    //Abaixo existem anotações no construtor, essas anotações são para a biblioteca Jackson, que transforma classes em JSON e vice-versa
+    //Para que essa conversão seja feita, as anotações definem como os campos serão ao serem transformados para JSON
+
+    //Obs.: na descrição da atividade era descrito que era necessário uma função paraString(), 
+    //Porém, como a biblioteca Jackson já possui uma funcionalidade incorporada e possui uma outra dinâmica de leitura de dados, não houve a necessidade da função
+
     @JsonCreator
     public Endereco(@JsonProperty("rua") String rua, @JsonProperty("numero") int numero, @JsonProperty("bairro") String bairro, @JsonProperty("cep") int cep, 
                     @JsonProperty("cidade") String cidade, @JsonProperty("estado") String estado) {
@@ -19,6 +25,8 @@ public class Endereco {
         this.cidade = cidade;
         this.estado = estado;
     }
+
+    //métodos getters e setters
 
     public void setRua(String rua) {
         this.rua = rua;
@@ -67,8 +75,5 @@ public class Endereco {
     public String getEstado() {
         return this.estado;
     }
-
-    //todo
-    public void paraString() { }
 
 }

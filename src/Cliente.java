@@ -3,14 +3,18 @@ import java.util.Calendar;
 import java.util.List;
 
 public class Cliente {
-    protected String tipo;
+    //O campo tipo é definido para verificar se o cliente é da classe PessoaFisica ou PessoaJuridica
+    //Isso é utilizado na hora de ler os arquivos JSON e verificar facilmente o tipo da classe do Cliente
+    protected String tipo; 
+
     protected String nome;
-    protected String numeroCadastro;
+    protected String numeroCadastro; //Tanto o cliente físico como o jurídico usam o mesmo campo para o cpf/cnpj, isso facilita na codificação do sistema
     protected Endereco endereco;
     protected Date data;
     protected List<Compra> compras;
-    
-    public void paraString() { }
+
+    //Obs.: na descrição da atividade era descrito que era necessário uma função paraString(), 
+    //Porém, como a biblioteca Jackson já possui uma funcionalidade incorporada e possui uma outra dinâmica de leitura de dados, não houve a necessidade da função
 
     public Cliente(String nome, String numeroCadastro, Endereco endereco, Date data, String tipo) {
         this.tipo = tipo;
@@ -31,6 +35,8 @@ public class Cliente {
     public void adicionarCompra(Compra compra) {
         compras.add(compra);
     }
+
+    //métodos getters e setters
 
     public String getNome() {
         return nome;
@@ -64,6 +70,7 @@ public class Cliente {
         return data;
     }
 
+    //existem duas possibilidades para definir uma data, passando um objeto ou os dados que estarão neste objeto
     public void setData(int dia, int mes, int ano) {
         Calendar calendario = Calendar.getInstance();
         calendario.set(Calendar.YEAR, ano);
